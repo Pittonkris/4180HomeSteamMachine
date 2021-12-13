@@ -40,7 +40,29 @@ class MenuApp(App):
         return Menu()
 
 def on_joy_hat(win, stickid, axisid, value):
+    global selected_index, buttons, test_label
     test_label.text = f'axisid: {str(axisid)} value: {str(value)}'
+
+    if value[1] == 1:
+        buttons[selected_index].state = 'normal'
+
+        if selected_index == 0:
+            selected_index = len(buttons) - 1
+        else:
+            selected_index -= 1
+
+        buttons[selected_index].state = 'down'
+    else if value[1] == -1:
+        buttons[selected_index].state = 'normal'
+
+        if selected_index == len(buttons) - 1:
+            selected_index = 0
+        else:
+            selected_index += 1
+
+        buttons[selected_index].state = 'down'
+
+
 
 Window.bind(on_joy_hat=on_joy_hat)
 
