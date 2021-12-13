@@ -39,31 +39,47 @@ class MenuApp(App):
     def build(self):
         return Menu()
 
+def selection_up():
+    global selected_index, buttons
+    buttons[selected_index].state = 'normal'
+
+    if selected_index == 0:
+        selected_index = len(buttons) - 1
+    else:
+        selected_index -= 1
+
+    buttons[selected_index].state = 'down'
+
+def selection_down():
+    global selected_index, buttons
+    buttons[selected_index].state = 'normal'
+
+    if selected_index == len(buttons) - 1:
+        selected_index = 0
+    else:
+        selected_index += 1
+
+    buttons[selected_index].state = 'down'
+
 def on_joy_hat(win, stickid, axisid, value):
-    global selected_index, buttons, test_label
     test_label.text = f'axisid: {str(axisid)} value: {str(value)}'
 
     if value[1] == 1:
-        buttons[selected_index].state = 'normal'
-
-        if selected_index == 0:
-            selected_index = len(buttons) - 1
-        else:
-            selected_index -= 1
-
-        buttons[selected_index].state = 'down'
+        selection_up()
     elif value[1] == -1:
-        buttons[selected_index].state = 'normal'
+        selection_down()
 
-        if selected_index == len(buttons) - 1:
-            selected_index = 0
-        else:
-            selected_index += 1
+def on_joy_axis(win, stickid, axisid, value):
+    test_label.text = f'axisid: {str(axisid)} value: {str(value)}'
 
-        buttons[selected_index].state = 'down'
+    if axisid != 1:
+        return
 
+    if value[1] > 500:
+        selection_up()
+    elif value[1] < -500:
+        selection_down()
 
-
-Window.bind(on_joy_hat=on_joy_hat)
+Window.bind(on_joy_hat=on_joy_hat, on_joy_axis=on_joy_axis)
 
 MenuApp().run()
