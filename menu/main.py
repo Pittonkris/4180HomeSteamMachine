@@ -31,6 +31,7 @@ class Menu(Widget):
 
         buttons[0].state = 'down'
 
+        print(self.ids.testlabel)
         test_label = self.ids.testlabel
 
 
