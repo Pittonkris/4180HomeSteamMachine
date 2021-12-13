@@ -34,13 +34,12 @@ class Menu(Widget):
         test_label = self.ids.testlabel
 
 
-
 class MenuApp(App):
     def build(self):
         return Menu()
 
 def on_joy_hat(win, stickid, axisid, value):
-    test_label.text = f'axisid: {axisid} value: {value}'
+    test_label.text = f'axisid: {str(axisid)} value: {str(value)}'
 
 Window.bind(on_joy_hat=on_joy_hat)
 
