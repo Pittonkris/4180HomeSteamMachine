@@ -75,9 +75,9 @@ def on_joy_axis(win, stickid, axisid, value):
     if axisid != 1:
         return
 
-    if value[1] > 500:
+    if value > 500:
         selection_up()
-    elif value[1] < -500:
+    elif value < -500:
         selection_down()
 
 Window.bind(on_joy_hat=on_joy_hat, on_joy_axis=on_joy_axis)
