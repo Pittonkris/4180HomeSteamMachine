@@ -52,7 +52,7 @@ def on_joy_hat(win, stickid, axisid, value):
             selected_index -= 1
 
         buttons[selected_index].state = 'down'
-    else if value[1] == -1:
+    elif value[1] == -1:
         buttons[selected_index].state = 'normal'
 
         if selected_index == len(buttons) - 1:
