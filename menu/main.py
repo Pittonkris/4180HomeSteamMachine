@@ -78,6 +78,8 @@ def selection_down():
     buttons[selected_index].state = 'down'
 
 def on_joy_button_down(win, stickid, buttonid):
+    if not Window.focus: return
+    
     if buttonid == 11:
         selection_up()
     elif buttonid == 12:
