@@ -5,8 +5,8 @@
 # touch 1
 # killall --signal SIGKILL python3
 # touch 2
-# killall --signal SIGKILL xinit
+killall --signal SIGKILL xinit
 # touch 3
 # killall xow
-# killall Xorg
+killall Xorg
 steamlink
