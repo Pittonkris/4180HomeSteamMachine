@@ -17,7 +17,7 @@ selected_index = 0
 
 class GameButton(Button):
     def on_press(self):
-        subprocess.run(['bash', f'../apps/{self.text}/run.sh'], shell=True)
+        subprocess.run(['bash', f'../apps/{self.text}/run.sh'])
 
 class Menu(Widget):
     def move_bg(self, dt):
