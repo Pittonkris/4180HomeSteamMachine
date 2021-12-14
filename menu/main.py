@@ -17,7 +17,7 @@ selected_index = 0
 
 class GameButton(Button):
     def on_press(self):
-        subprocess.run(['bash', f'../apps/{self.text}/run.sh'])
+        subprocess.run(['bash', f'../apps/{self.text}/run.sh'], check=True)
 
 class Menu(Widget):
     def move_bg(self, dt):
@@ -79,7 +79,7 @@ def selection_down():
 
 def on_joy_button_down(win, stickid, buttonid):
     if not Window.focus: return
-    
+
     if buttonid == 11:
         selection_up()
     elif buttonid == 12:
