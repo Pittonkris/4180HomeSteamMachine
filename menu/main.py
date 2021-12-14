@@ -77,14 +77,6 @@ def selection_down():
 
     buttons[selected_index].state = 'down'
 
-def on_joy_hat(win, stickid, axisid, value):
-    test_label.text = f'axisid: {str(axisid)} value: {str(value)}'
-
-    if value[1] == 1:
-        selection_up()
-    elif value[1] == -1:
-        selection_down()
-
 def on_joy_button_down(win, stickid, buttonid):
     if buttonid == 11:
         selection_up()
@@ -96,6 +88,6 @@ def on_joy_button_down(win, stickid, buttonid):
 def on_joy_button_up(win, stickid, buttonid):
     pass
 
-Window.bind(on_joy_hat=on_joy_hat, on_joy_button_down=on_joy_button_down, on_joy_button_up=on_joy_button_up)
+Window.bind(on_joy_button_down=on_joy_button_down, on_joy_button_up=on_joy_button_up)
 
 MenuApp().run()
