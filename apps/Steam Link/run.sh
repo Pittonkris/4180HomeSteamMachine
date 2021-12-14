@@ -1,3 +1,2 @@
-nohup bash run2.sh &
-disown
+( bash run2.sh & )
 killall Xorg
