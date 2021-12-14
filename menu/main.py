@@ -85,10 +85,10 @@ def on_joy_hat(win, stickid, axisid, value):
     elif value[1] == -1:
         selection_down()
 
-def on_joy_button_down(win, stickid, axisid, value):
-    pass
+def on_joy_button_down(win, stickid, buttonid):
+    test_label.text = f'button: {buttonid}'
 
-def on_joy_button_up(win, stickid, axisid, value):
+def on_joy_button_up(win, stickid, buttonid):
     pass
 
 Window.bind(on_joy_hat=on_joy_hat, on_joy_button_down=on_joy_button_down, on_joy_button_up=on_joy_button_up)
