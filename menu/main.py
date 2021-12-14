@@ -86,11 +86,11 @@ def on_joy_hat(win, stickid, axisid, value):
         selection_down()
 
 def on_joy_button_down(win, stickid, buttonid):
-    if button_id == 11:
+    if buttonid == 11:
         selection_up()
-    elif button_id == 12:
+    elif buttonid == 12:
         selection_down()
-    elif button_id == 0:
+    elif buttonid == 0:
         buttons[selected_index].on_press()
 
 def on_joy_button_up(win, stickid, buttonid):
