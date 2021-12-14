@@ -25,7 +25,7 @@ class Menu(Widget):
         for f in os.listdir("../apps"):
             if not os.path.isfile(f) and not f.startswith('.'):
                 button = GameButton(text=f, height=80, size_hint_y=None)
-                buttons.append(button)
+                self.buttons.append(button)
                 gamelist.add_widget(button)
 
     def move_bg(self, dt):
