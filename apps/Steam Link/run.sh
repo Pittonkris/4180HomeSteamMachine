@@ -7,6 +7,6 @@ touch 1
 touch 2
 killall --signal SIGKILL xinit
 touch 3
-killall xow
+# killall xow
 killall Xorg
 steamlink
