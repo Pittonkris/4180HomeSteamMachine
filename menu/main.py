@@ -11,21 +11,59 @@ from kivy.uix.widget import Widget
 from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle
 
-buttons = []
-test_label = None
-selected_index = 0
-
 class GameButton(Button):
     def on_press(self):
         subprocess.Popen(['bash', f'../apps/{self.text}/run.sh'])
 
 class Menu(Widget):
+    buttons = []
+    selected_index = 0
+
+    def refresh_list(self):
+        gamelist = self.ids.gamelist
+
+        for f in os.listdir("../apps"):
+            if not os.path.isfile(f) and not f.startswith('.'):
+                button = GameButton(text=f, height=80, size_hint_y=None)
+                buttons.append(button)
+                gamelist.add_widget(button)
+
     def move_bg(self, dt):
         self.bg_texture.uvpos = (self.bg_texture.uvpos[0] - (dt / 2), self.bg_texture.uvpos[1] + (dt / 2))
         self.canvas.before.clear()
         with self.canvas.before:
             Color(rgba=(1,1,1,0.4))
             Rectangle(texture=self.bg_texture, size=self.size, pos=self.pos)
+
+    def selection_up():
+        self.buttons[self.selected_index].state = 'normal'
+
+        if self.selected_index == 0:
+            self.selected_index = len(self.buttons) - 1
+        else:
+            self.selected_index -= 1
+
+        self.buttons[self.selected_index].state = 'down'
+
+    def selection_down():
+        self.buttons[self.selected_index].state = 'normal'
+
+        if self.selected_index == len(self.buttons) - 1:
+            self.selected_index = 0
+        else:
+            self.selected_index += 1
+
+        self.buttons[self.selected_index].state = 'down'
+
+    def on_joy_button_down(win, stickid, buttonid):
+        if not Window.focus: return
+
+        if buttonid == 11:
+            selection_up()
+        elif buttonid == 12:
+            selection_down()
+        elif buttonid == 0:
+            self.buttons[self.selected_index].on_press()
 
     def __init__(self, **kwargs):
         self.bg_texture = Image(source="bg.png").texture
@@ -34,62 +72,17 @@ class Menu(Widget):
 
         super().__init__(**kwargs)
 
-        gamelist = self.ids.gamelist
+        self.refresh_list()
 
-        for f in os.listdir("../apps"):
-            if not os.path.isfile(f):
-                button = GameButton(text=f, height=80, size_hint_y=None)
-                # button.background_color = (251 / 256, 183 / 256, 17 / 256, 1)
-                buttons.append(button)
-                gamelist.add_widget(button)
-
-        buttons[0].state = 'down'
-
-        global test_label
-        test_label = self.ids.testlabel
+        self.buttons[0].state = 'down'
 
         Clock.schedule_interval(self.move_bg, 0)
+
+        Window.bind(on_joy_button_down=self.on_joy_button_down)
 
 
 class MenuApp(App):
     def build(self):
         return Menu()
-
-def selection_up():
-    global selected_index, buttons
-    buttons[selected_index].state = 'normal'
-
-    if selected_index == 0:
-        selected_index = len(buttons) - 1
-    else:
-        selected_index -= 1
-
-    buttons[selected_index].state = 'down'
-
-def selection_down():
-    global selected_index, buttons
-    buttons[selected_index].state = 'normal'
-
-    if selected_index == len(buttons) - 1:
-        selected_index = 0
-    else:
-        selected_index += 1
-
-    buttons[selected_index].state = 'down'
-
-def on_joy_button_down(win, stickid, buttonid):
-    if not Window.focus: return
-
-    if buttonid == 11:
-        selection_up()
-    elif buttonid == 12:
-        selection_down()
-    elif buttonid == 0:
-        buttons[selected_index].on_press()
-
-def on_joy_button_up(win, stickid, buttonid):
-    pass
-
-Window.bind(on_joy_button_down=on_joy_button_down, on_joy_button_up=on_joy_button_up)
 
 MenuApp().run()
