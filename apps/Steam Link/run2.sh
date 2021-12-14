@@ -1,2 +1,2 @@
-sleep 50
+sleep 1
 steamlink
