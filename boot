@@ -6,8 +6,5 @@ matchbox-window-manager -use_titlebar no &
 unclutter &    # hide X mouse cursor unless mouse activated
 
 # execute in an infinite loop so it relaunches if there's a crash
-while true
-do
-  cd /home/pi/4180HomeSteamMachine/menu
-  python3 main.py > log.txt 2>&1
-done
+cd /home/pi/4180HomeSteamMachine/menu
+python3 main.py > log.txt 2>&1
