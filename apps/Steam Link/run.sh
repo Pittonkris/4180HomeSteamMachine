@@ -7,5 +7,5 @@
 killall --signal SIGKILL xinit
 # touch 3
 # killall xow
-# killall Xorg
+killall --signal SIGKILL Xorg
 steamlink
