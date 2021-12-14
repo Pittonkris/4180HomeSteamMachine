@@ -24,7 +24,7 @@ class Menu(Widget):
         self.bg_texture.uvpos = (self.bg_texture.uvpos[0] - (dt / 2), self.bg_texture.uvpos[1] + (dt / 2))
         self.canvas.before.clear()
         with self.canvas.before:
-            Color(rgba=(1,1,1,0.3))
+            Color(rgba=(1,1,1,0.4))
             Rectangle(texture=self.bg_texture, size=self.size, pos=self.pos)
 
     def __init__(self, **kwargs):
@@ -39,6 +39,7 @@ class Menu(Widget):
         for f in os.listdir("../apps"):
             if not os.path.isfile(f):
                 button = GameButton(text=f, height=80, size_hint_y=None)
+                # button.background_color = (251 / 256, 183 / 256, 17 / 256, 1)
                 buttons.append(button)
                 gamelist.add_widget(button)
 
