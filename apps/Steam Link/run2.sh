@@ -1,2 +1,1 @@
-sleep 1
-steamlink
+sleep 1 && steamlink
