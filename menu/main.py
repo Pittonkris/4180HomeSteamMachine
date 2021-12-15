@@ -60,9 +60,9 @@ class Menu(Widget):
         if not Window.focus: return
 
         if buttonid == 11:
-            selection_up()
+            self.selection_up()
         elif buttonid == 12:
-            selection_down()
+            self.selection_down()
         elif buttonid == 0:
             self.buttons[self.selected_index].on_press()
 
