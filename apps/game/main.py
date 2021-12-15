@@ -42,7 +42,7 @@ game_over = pygame.image.load("pics/game_over.png")
 lives_page = pygame.image.load("pics/lives.png")
 bodies_page = pygame.image.load("pics/bodies.png")
 
-DISPLAYSURF = pygame.display.set_mode((600,400))
+DISPLAYSURF = pygame.display.set_mode((600,400), pygame.FULLSCREEN)
 DISPLAYSURF.fill(BLACK)
 
 class Enemy(pygame.sprite.Sprite):
