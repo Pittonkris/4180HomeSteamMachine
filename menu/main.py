@@ -2,6 +2,7 @@ import os
 import os.path
 import subprocess
 import functools
+import socket
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -79,6 +80,12 @@ class Menu(Widget):
         Clock.schedule_interval(self.move_bg, 0)
 
         Window.bind(on_joy_button_down=self.on_joy_button_down)
+
+        
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        self.ids.ip.text = f'       Samba IP: {s.getsockname()[0]}'
+        s.close()
 
 
 class MenuApp(App):
