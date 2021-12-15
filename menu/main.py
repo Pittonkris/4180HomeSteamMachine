@@ -36,7 +36,7 @@ class Menu(Widget):
             Color(rgba=(1,1,1,0.4))
             Rectangle(texture=self.bg_texture, size=self.size, pos=self.pos)
 
-    def selection_up():
+    def selection_up(self):
         self.buttons[self.selected_index].state = 'normal'
 
         if self.selected_index == 0:
@@ -46,7 +46,7 @@ class Menu(Widget):
 
         self.buttons[self.selected_index].state = 'down'
 
-    def selection_down():
+    def selection_down(self):
         self.buttons[self.selected_index].state = 'normal'
 
         if self.selected_index == len(self.buttons) - 1:
@@ -56,7 +56,7 @@ class Menu(Widget):
 
         self.buttons[self.selected_index].state = 'down'
 
-    def on_joy_button_down(win, stickid, buttonid):
+    def on_joy_button_down(self, win, stickid, buttonid):
         if not Window.focus: return
 
         if buttonid == 11:
