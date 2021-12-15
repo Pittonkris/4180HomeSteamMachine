@@ -2,45 +2,94 @@ import os
 import os.path
 import subprocess
 import functools
+import socket
 
 from kivy.app import App
+from kivy.clock import Clock
 from kivy.uix.button import Button
+from kivy.uix.image import Image
 from kivy.uix.widget import Widget
 from kivy.core.window import Window
-
-buttons = []
-test_label = None
-selected_index = 0
+from kivy.graphics import Color, Rectangle
 
 class GameButton(Button):
     def on_press(self):
-        subprocess.run(['bash', f'../apps/{self.text}/run.sh'])
+        subprocess.Popen(['bash', f'../apps/{self.text}/run.sh'])
 
 class Menu(Widget):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    buttons = []
+    selected_index = 0
 
+    def refresh_list(self):
         gamelist = self.ids.gamelist
 
-        first = True
         for f in os.listdir("../apps"):
-            if not os.path.isfile(f):
+            if not os.path.isfile(f) and not f.startswith('.'):
                 button = GameButton(text=f, height=80, size_hint_y=None)
-                buttons.append(button)
+                self.buttons.append(button)
                 gamelist.add_widget(button)
 
-        buttons[0].state = 'down'
+    def move_bg(self, dt):
+        self.bg_texture.uvpos = (self.bg_texture.uvpos[0] - (dt / 2), self.bg_texture.uvpos[1] + (dt / 2))
+        self.canvas.before.clear()
+        with self.canvas.before:
+            Color(rgba=(1,1,1,0.4))
+            Rectangle(texture=self.bg_texture, size=self.size, pos=self.pos)
 
-        test_label = self.ids.testlabel
+    def selection_up():
+        self.buttons[self.selected_index].state = 'normal'
+
+        if self.selected_index == 0:
+            self.selected_index = len(self.buttons) - 1
+        else:
+            self.selected_index -= 1
+
+        self.buttons[self.selected_index].state = 'down'
+
+    def selection_down():
+        self.buttons[self.selected_index].state = 'normal'
+
+        if self.selected_index == len(self.buttons) - 1:
+            self.selected_index = 0
+        else:
+            self.selected_index += 1
+
+        self.buttons[self.selected_index].state = 'down'
+
+    def on_joy_button_down(win, stickid, buttonid):
+        if not Window.focus: return
+
+        if buttonid == 11:
+            selection_up()
+        elif buttonid == 12:
+            selection_down()
+        elif buttonid == 0:
+            self.buttons[self.selected_index].on_press()
+
+    def __init__(self, **kwargs):
+        self.bg_texture = Image(source="bg.png").texture
+        self.bg_texture.wrap = 'repeat'
+        self.bg_texture.uvsize = ((1920 / 1080) * 8, -8)
+
+        super().__init__(**kwargs)
+
+        self.refresh_list()
+
+        self.buttons[0].state = 'down'
+
+        Clock.schedule_interval(self.move_bg, 0)
+
+        Window.bind(on_joy_button_down=self.on_joy_button_down)
+
+        
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        self.ids.ip.text = f'       Samba IP: {s.getsockname()[0]}'
+        s.close()
 
 
 class MenuApp(App):
     def build(self):
         return Menu()
-
-def on_joy_hat(win, stickid, axisid, value):
-    test_label.text = f'axisid: {str(axisid)} value: {str(value)}'
-
-Window.bind(on_joy_hat=on_joy_hat)
 
 MenuApp().run()
