@@ -220,7 +220,7 @@ while True:
                 sys.exit()
         elif screen == "game over":
             DISPLAYSURF.blit(game_over, (0, 0))
-            if event.type = JOYBUTTONDOWN:
+            if event.type == JOYBUTTONDOWN:
                 if event.button == 0:
                     screen = "opening screen"
                     break
