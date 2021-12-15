@@ -17,7 +17,6 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 FPS = 60
-
 FramePerSec = pygame.time.Clock()
 
 y_pos = 0
@@ -42,7 +41,7 @@ game_over = pygame.image.load("pics/game_over.png")
 lives_page = pygame.image.load("pics/lives.png")
 bodies_page = pygame.image.load("pics/bodies.png")
 
-DISPLAYSURF = pygame.display.set_mode((600,400), pygame.FULLSCREEN)
+DISPLAYSURF = pygame.display.set_mode((600,400), FULLSCREEN)
 DISPLAYSURF.fill(BLACK)
 
 class Enemy(pygame.sprite.Sprite):
@@ -92,18 +91,19 @@ class Player(pygame.sprite.Sprite):
         if self.rect.right > SCREEN_WIDTH:
             self.rect.right = SCREEN_WIDTH
 
-player1 = Player()
-player2 = Player()
-player2.rect.x = 300
-player2.stick = 1
-enemy = Enemy()
+#player1 = Player()
+#player2 = Player()
+#player2.rect.x = 300
+#player2.stick = 1
+#enemy = Enemy()
+new_game = True
 
-enemies = pygame.sprite.Group()
-enemies.add(enemy)
-all_sprites = pygame.sprite.Group()
-all_sprites.add(player1)
-all_sprites.add(player2)
-all_sprites.add(enemy)
+#enemies = pygame.sprite.Group()
+#enemies.add(enemy)
+#all_sprites = pygame.sprite.Group()
+#all_sprites.add(player1)
+#all_sprites.add(player2)
+#all_sprites.add(enemy)
 
 INC_SPEED = pygame.USEREVENT + 1
 pygame.time.set_timer(INC_SPEED, 500)
@@ -112,13 +112,27 @@ while True:
     pygame.display.update()
     for event in pygame.event.get():
         if screen == "opening screen":
+            if new_game:
+                player1 = Player()
+                player2 = Player()
+                player2.rect.x = 300
+                player2.stick = 1
+                enemy = Enemy()
+                enemies = pygame.sprite.Group()
+                enemies.add(enemy)
+                all_sprites = pygame.sprite.Group()
+                all_sprites.add(player1)
+                all_sprites.add(player2)
+                all_sprites.add(enemy)
+                new_game = False
+                speed = 5
             DISPLAYSURF.blit(opening, (0, 0))
             if event.type == JOYBUTTONDOWN:
                 if event.button == 0:
                     screen = "1 player bodies option"
                     break
                 if event.button == 1:
-                    screen = "2 player"
+                    screen = "1 player 2 bodies"
                     break
                 if event.button == 2:
                     pygame.quit()
@@ -130,7 +144,7 @@ while True:
             DISPLAYSURF.blit(bodies_page, (0,0))
             if event.type == JOYBUTTONDOWN:
                 if event.button == 0:
-                    screen = "lives option"
+                    screen = "1 player 1 body"
                     break
                 if event.button == 1:
                     screen = "1 player 2 bodies"
@@ -177,11 +191,12 @@ while True:
             player1.move()
             enemy.move()
             if pygame.sprite.spritecollideany(player1, enemies):
-                lives-=1
-                if lives == 0:
-                    screen = "game over"
-                    break
-                pygame.display.update()
+                #lives-=1
+                #if lives == 0:
+                screen = "game over"
+
+                break
+                #pygame.display.update()
 
         elif screen == "1 player 2 bodies":
             DISPLAYSURF.fill(BLACK)
@@ -200,18 +215,21 @@ while True:
             player1.move()
             player2.move()
             enemy.move()
-            if pygame.sprite.spritecollideany(player1, enemies):
-                player1.kill()
-                count_alive-=1
-                if count_alive == 0:
-                    screen = "game over"
-                    break
-            if pygame.sprite.spritecollideany(player2, enemies):
-                player2.kill()
-                count_alive-=1
-                if count_alive == 0:
-                    screen = "game over"
-                    break
+            # if pygame.sprite.spritecollideany(player1, enemies):
+            #     player1.kill()
+            #     count_alive-=1
+            #     if count_alive == 0:
+            #         screen = "game over"
+            #         break
+            # if pygame.sprite.spritecollideany(player2, enemies):
+            #     player2.kill()
+            #     count_alive-=1
+            #     if count_alive == 0:
+            #         screen = "game over"
+            #         break
+            if player1.rect.colliderect(enemy.rect) or player2.rect.colliderect(enemy.rect):
+                screen = "game over"
+                break
 
         elif screen == "2 player":
             DISPLAYSURF.fill(BLACK)
@@ -220,15 +238,21 @@ while True:
                 sys.exit()
         elif screen == "game over":
             DISPLAYSURF.blit(game_over, (0, 0))
-            if event.type = JOYBUTTONDOWN:
+            for entity in all_sprites:
+                entity.kill()
+            if event.type == JOYBUTTONDOWN:
                 if event.button == 0:
                     screen = "opening screen"
+                    new_game = True
                     break
+                if event.button == 2:
+                    pygame.quit()
+                    sys.exit()
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
 
-    player1.move()
+    #player1.move()
     enemy.move()
 
     # Moves and Re-draws all Sprites
